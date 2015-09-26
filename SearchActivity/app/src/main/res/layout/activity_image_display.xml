@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/ivResult"
         android:maxWidth="600dp"
-        android:src="@drawable/loading"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

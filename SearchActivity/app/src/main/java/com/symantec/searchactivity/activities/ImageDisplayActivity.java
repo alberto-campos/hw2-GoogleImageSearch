@@ -24,7 +24,7 @@ public class ImageDisplayActivity extends ActionBarActivity {
         // find the image view
         ImageView ivImage = (ImageView) findViewById(R.id.ivResult);
         // use Picasso to load the image
-        Picasso.with(this).load(url).into(ivImage);
+        Picasso.with(this).load(url).placeholder(R.drawable.loading).into(ivImage);
         getSupportActionBar().hide();
     }
 
