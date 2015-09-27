@@ -1,4 +1,4 @@
-package com.symantec.searchactivity.activities;
+package com.symantec.searchactivity.listeners;
 
 import android.widget.AbsListView;
 

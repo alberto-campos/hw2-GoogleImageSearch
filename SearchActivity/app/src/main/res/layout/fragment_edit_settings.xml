@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="@color/background_material_light"
+        android:layout_gravity="center"
+        android:layout_height="411dp"
+        android:id="@+id/innerLayout">
+
+    <TextView
+        android:id="@+id/lbl_size" android:text="@string/str_size"
+        android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_below="@+id/tvSettings"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignBottom="@+id/et_size"
+        android:gravity="bottom"
+        android:padding="10dp" />
+
+
+    <EditText
+        android:id="@+id/et_size"
+        android:layout_width="match_parent"  android:layout_height="wrap_content"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:layout_gravity="center_vertical"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/tvSettings"
+        android:layout_toRightOf="@+id/lbl_size"
+        android:layout_toEndOf="@+id/lbl_size"
+        android:padding="10dp"
+        android:gravity="bottom" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Advanced Filters"
+            android:id="@+id/tvSettings"
+            android:background="@color/background_material_dark"
+            android:padding="20dp"
+            android:textColor="@color/primary_blue"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/et_size"
+            android:layout_alignEnd="@+id/et_size" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:text="@string/str_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="bottom"
+            android:padding="10dp"
+            android:layout_below="@+id/lbl_size"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+            android:gravity="bottom"
+            android:layout_alignTop="@+id/textView"
+            android:layout_toRightOf="@+id/textView"
+            android:layout_toEndOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:text="@string/str_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="bottom"
+            android:padding="10dp"
+            android:layout_below="@+id/editText"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+            android:gravity="bottom"
+            android:layout_below="@+id/editText"
+            android:layout_toRightOf="@+id/textView2"
+            android:layout_toEndOf="@+id/textView2" />
+
+        <TextView
+            android:id="@+id/tvWebSite"
+            android:text="@string/str_site"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:gravity="bottom"
+            android:padding="10dp"
+            android:layout_below="@+id/editText2"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:id="@+id/etWebSite"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:imeOptions="actionDone"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+            android:gravity="bottom"
+            android:layout_alignTop="@+id/tvWebSite"
+            android:layout_toEndOf="@+id/tvWebSite"
+            android:layout_alignBottom="@+id/tvWebSite"
+            android:layout_toRightOf="@+id/tvWebSite" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:id="@+id/btnCancel"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="57dp" />
+
+
+    </RelativeLayout>
+
+</LinearLayout>

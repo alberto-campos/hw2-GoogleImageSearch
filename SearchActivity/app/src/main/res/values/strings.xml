@@ -6,4 +6,12 @@
     <string name="str_loading">Loading...</string>
     <string name="title_activity_image_display">ImageDisplayActivity</string>
 
+
+    <string name="str_size">Image size</string>
+    <string name="str_color">Color filter</string>
+    <string name="str_type">Image type</string>
+    <string name="str_site">Web Site</string>
+
+    <string name="et_site_hint">codepath.com</string>
+
 </resources>

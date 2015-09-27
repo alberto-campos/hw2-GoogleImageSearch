@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
@@ -14,7 +15,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridView;
 import android.support.v7.widget.SearchView;
 import android.widget.Toast;
@@ -22,6 +22,8 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.symantec.searchactivity.adapters.ImageResultArrayAdapter;
+import com.symantec.searchactivity.fragments.EditSettingsDialog;
+import com.symantec.searchactivity.listeners.EndlessScrollListener;
 import com.symantec.searchactivity.models.ImageResult;
 import com.symantec.searchactivity.R;
 
@@ -32,9 +34,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
-
-
-//public class SearchActivity extends ActionBarActivity {
 
 public class SearchActivity extends AppCompatActivity {
     //EditText etQuery;
@@ -91,7 +90,7 @@ public class SearchActivity extends AppCompatActivity {
         //etQuery = (EditText) findViewById(R.id.etQuery);
         etQuery = (SearchView) findViewById(R.id.action_search);
         gvResults = (GridView) findViewById(R.id.gvResults);
-        btnSearch = (Button) findViewById(R.id.btnSearch);
+       // btnSearch = (Button) findViewById(R.id.btnSearch);
         imageResults = new ArrayList<>();
         imageAdapter = new ImageResultArrayAdapter(this, imageResults);
 
@@ -127,20 +126,18 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-
-
-
-        MenuItem actionViewItem = menu.findItem(R.id.miActionButton);
-        // Retrieve the action-view from menu
-        View v = MenuItemCompat.getActionView(actionViewItem);
-        // Find the button within action-view
-        Button b = (Button) v.findViewById(R.id.btnSearch);
-        // Handle button click here
-        Toast.makeText(this, "Button clicked", Toast.LENGTH_SHORT).show();
-        return super.onPrepareOptionsMenu(menu);
-    }
+//    @Override
+//    public boolean onPrepareOptionsMenu(Menu menu) {
+//
+//       // MenuItem actionViewItem = menu.findItem(R.id.miActionButton);
+//        // Retrieve the action-view from menu
+//       // View v = MenuItemCompat.getActionView(actionViewItem);
+//        // Find the button within action-view
+//       // Button b = (Button) v.findViewById(R.id.btnSearch);
+//        // Handle button click here
+//        Toast.makeText(this, "Button clicked", Toast.LENGTH_SHORT).show();
+//        return super.onPrepareOptionsMenu(menu);
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -149,7 +146,11 @@ public class SearchActivity extends AppCompatActivity {
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
+        //searchItem.setIcon(R.drawable.abc_btn_check_material);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setQueryHint("Search query...");
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -180,15 +181,24 @@ public class SearchActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        Toast.makeText(this, "Item selected" + item.toString(), Toast.LENGTH_SHORT).show();
+
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            showEditDialog();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    private void showEditDialog() {
+
+        FragmentManager fm = getSupportFragmentManager();
+        EditSettingsDialog editDialog = EditSettingsDialog.newInstance("Advanced Filter");
+        editDialog.show(getFragmentManager(), "fragment_edit_settings");
+    }
+
 
     private String constructQueryString() {
         String search_url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0";
@@ -236,24 +246,25 @@ public class SearchActivity extends AppCompatActivity {
                     imageAdapter.addAll(ImageResult.fromJSONArray(imageJsonResults));
                     imageAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
-                    Toast.makeText(getApplicationContext(), "Unexpected error after Success", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Unexpected error after Success. i.e. No more results found.", Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Toast.makeText(getApplicationContext(), "Exception onFailure", Toast.LENGTH_SHORT).show();
+
+                Toast.makeText(getApplicationContext(), "Exception onFailure. Unknown host or No address associated with hostname.", Toast.LENGTH_SHORT).show();
                 super.onFailure(statusCode, headers, responseString, throwable);
             }
         });
     }
 
-    public void onImageSearch(View view) {
-        resetSearch();
-        setupViews();
-        retrieveImages();
-    }
+//    public void onImageSearch(View view) {
+//        resetSearch();
+//        setupViews();
+//        retrieveImages();
+//    }
 
     boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -276,7 +287,7 @@ public class SearchActivity extends AppCompatActivity {
 //            }
         }
         else {
-            Toast.makeText(this, "No network is available", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No Data or Network is available", Toast.LENGTH_SHORT).show();
         }
     }
 

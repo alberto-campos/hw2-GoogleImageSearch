@@ -51,4 +51,8 @@ public class ImageResult implements Serializable {
         return this.title;
     }
 
+    public void setImage(String image){
+        
+    };
+
 }
