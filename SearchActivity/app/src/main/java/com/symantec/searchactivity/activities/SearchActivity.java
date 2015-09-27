@@ -37,7 +37,8 @@ import cz.msebera.android.httpclient.Header;
 //public class SearchActivity extends ActionBarActivity {
 
 public class SearchActivity extends AppCompatActivity {
-    EditText etQuery;
+    //EditText etQuery;
+    SearchView etQuery;
     GridView gvResults;
     Button btnSearch;
     ArrayList<ImageResult> imageResults;
@@ -87,7 +88,8 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void setupViews() {
-        etQuery = (EditText) findViewById(R.id.etQuery);
+        //etQuery = (EditText) findViewById(R.id.etQuery);
+        etQuery = (SearchView) findViewById(R.id.action_search);
         gvResults = (GridView) findViewById(R.id.gvResults);
         btnSearch = (Button) findViewById(R.id.btnSearch);
         imageResults = new ArrayList<>();
@@ -191,7 +193,8 @@ public class SearchActivity extends AppCompatActivity {
     private String constructQueryString() {
         String search_url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0";
         String var_size = "&rsz=" + R_SIZE;
-        String query = etQuery.getText().toString();
+        String query = etQuery.getQuery().toString();
+        //String query = etQuery.getText().toString();
         String var_query = "&q=" + query;
         String var_start = "&start=" + (startAt);
 

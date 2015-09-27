@@ -14,7 +14,7 @@
         android:textSize="18dp" /-->
 
 
-    <EditText
+    <!--EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/etQueryActionBar"
@@ -22,13 +22,13 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:hint="@string/str_enterText" />
+        android:hint="@string/str_enterText" /-->
 
-    <Button
+    <!--Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/str_search"
         android:id="@+id/btnSearch"
-        android:layout_gravity="center_vertical" />
+        android:layout_gravity="center_vertical" /-->
 
 </LinearLayout>
