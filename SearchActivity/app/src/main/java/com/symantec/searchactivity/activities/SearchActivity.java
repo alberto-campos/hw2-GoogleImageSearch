@@ -2,6 +2,7 @@ package com.symantec.searchactivity.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.ActionBarActivity;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,7 +27,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.NetworkInterface;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
@@ -39,11 +40,32 @@ public class SearchActivity extends ActionBarActivity {
     ArrayList<ImageResult> imageResults;
     ImageResultArrayAdapter imageAdapter;
 
+    private int startAt = 1;
+    private int currentPage = 0;
+    private static int MAX_PAGINATION = 8;
+    private static int R_SIZE = 8;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         setupViews();
+    }
+
+    public void setSettings() {
+        SharedPreferences settings = getSharedPreferences("ImageSearchSettings", 0);
+        String size = settings.getString("size", null);
+        SharedPreferences.Editor editor = settings.edit();
+
+        if (size == null ) {
+            // First time saving settings
+        }
+        else {
+            // User saved settings
+            editor.putString("size", "all");
+            editor.putString("color", "all");
+            editor.commit();
+        }
     }
 
     public void setupViews() {
@@ -52,7 +74,39 @@ public class SearchActivity extends ActionBarActivity {
         btnSearch = (Button) findViewById(R.id.btnSearch);
         imageResults = new ArrayList<>();
         imageAdapter = new ImageResultArrayAdapter(this, imageResults);
+
         gvResults.setAdapter(imageAdapter);
+
+        gvResults.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+
+                if (page <= 8) {
+                    customLoadMoreDataFromApi(page);
+                } else {
+                    // No more results to show
+                }
+            }
+        });
+
+        /*
+        // This, the default one works.
+
+        gvResults.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                customLoadMoreDataFromApi(currentPage++);
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+
+        });
+
+        */
+
         gvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -93,43 +147,76 @@ public class SearchActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onImageSearch(View view) {
+    private String constructQueryString() {
         String search_url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0";
-        int size = 8;
-        String var_size = "&rsz=" + size;
+        String var_size = "&rsz=" + R_SIZE;
         String query = etQuery.getText().toString();
         String var_query = "&q=" + query;
+        String var_start = "&start=" + (startAt);
+
+        return search_url + var_size + var_query + var_start;
+    }
+
+    private boolean increasePage() {
+
+        if (currentPage < MAX_PAGINATION) {
+            currentPage++;
+            startAt = startAt + R_SIZE;
+            return true;
+        } else
+        {
+            // reset
+            currentPage = 0;
+            startAt = 1;
+            return false;
+        }
+    }
+
+
+    private void fetchImages() {
+
         AsyncHttpClient client = new AsyncHttpClient();
 
-        if (isNetworkAvailable()) {
+        // Get Request
+        client.get(constructQueryString(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                JSONArray imageJsonResults;
+                try {
+                    imageJsonResults = response.getJSONObject("responseData").getJSONArray("results");
 
-            // Get https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=android&rsz=8
-            // Get Request
-            client.get(search_url + var_size + var_query, new JsonHttpResponseHandler() {
-                @Override
-                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                    JSONArray imageJsonResults;
-                    try {
-                        imageJsonResults = response.getJSONObject("responseData").getJSONArray("results");
+                    if (currentPage == 0) {
                         imageAdapter.clear();
-                        imageAdapter.addAll(ImageResult.fromJSONArray(imageJsonResults));
-                        //  Log.d("DEBUG", imageJsonResults.toString());
-                        imageAdapter.notifyDataSetChanged();
-                    } catch (JSONException e) {
-                        Toast.makeText(getApplicationContext(), "Unexpected error after Success", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
                     }
+                    imageAdapter.addAll(ImageResult.fromJSONArray(imageJsonResults));
+                    imageAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    Toast.makeText(getApplicationContext(), "Unexpected error after Success", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 }
+            }
 
-                @Override
-                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Toast.makeText(getApplicationContext(), "Exception onFailure", Toast.LENGTH_SHORT).show();
+                super.onFailure(statusCode, headers, responseString, throwable);
+            }
+        });
+    }
 
-                    Toast.makeText(getApplicationContext(), "Exception onFailure", Toast.LENGTH_SHORT).show();
-
-                    super.onFailure(statusCode, headers, responseString, throwable);
-
-                }
-            });
+    public void onImageSearch(View view) {
+        if (isNetworkAvailable()) {
+            fetchImages();
+            if (increasePage()) {
+                fetchImages();
+            }
+            if (increasePage()) {
+                fetchImages();
+            }
+            else
+            {
+                // TODO: Handle user requested more than allowed retrieval
+            }
         }
         else {
             Toast.makeText(this, "No network is available", Toast.LENGTH_SHORT).show();
@@ -143,5 +230,9 @@ public class SearchActivity extends ActionBarActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
     }
 
+    private void customLoadMoreDataFromApi(int page) {
+        // Reload
+        Toast.makeText(this, "More data requested: " + page, Toast.LENGTH_SHORT).show();
+    }
 
 }

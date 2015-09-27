@@ -44,7 +44,6 @@ public class ImageResult implements Serializable {
     public String getFullUrl () {
         return this.fullUrl;
     }
-
     public String getThumbUrl() {
         return this.thumbUrl;
     }
