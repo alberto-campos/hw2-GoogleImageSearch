@@ -5,12 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,7 +35,6 @@ import java.util.ArrayList;
 import cz.msebera.android.httpclient.Header;
 
 public class SearchActivity extends AppCompatActivity {
-    //EditText etQuery;
     SearchView etQuery;
     GridView gvResults;
     Button btnSearch;
@@ -69,23 +66,6 @@ public class SearchActivity extends AppCompatActivity {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayShowHomeEnabled(false);
         actionBar.setDisplayShowTitleEnabled(false);
-    }
-
-
-    public void setSettings() {
-        SharedPreferences settings = getSharedPreferences("ImageSearchSettings", 0);
-        String size = settings.getString("size", null);
-        SharedPreferences.Editor editor = settings.edit();
-
-        if (size == null ) {
-            // First time saving settings
-        }
-        else {
-            // User saved settings
-            editor.putString("size", "all");
-            editor.putString("color", "all");
-            editor.commit();
-        }
     }
 
     public void setupViews() {
@@ -127,19 +107,6 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
     }
-
-//    @Override
-//    public boolean onPrepareOptionsMenu(Menu menu) {
-//
-//       // MenuItem actionViewItem = menu.findItem(R.id.miActionButton);
-//        // Retrieve the action-view from menu
-//       // View v = MenuItemCompat.getActionView(actionViewItem);
-//        // Find the button within action-view
-//       // Button b = (Button) v.findViewById(R.id.btnSearch);
-//        // Handle button click here
-//        Toast.makeText(this, "Button clicked", Toast.LENGTH_SHORT).show();
-//        return super.onPrepareOptionsMenu(menu);
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -201,11 +168,12 @@ public class SearchActivity extends AppCompatActivity {
         String search_url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0";
         String var_size = "&rsz=" + R_SIZE;
         String query = etQuery.getQuery().toString();
-        //String query = etQuery.getText().toString();
         String var_query = "&q=" + query;
         String var_start = "&start=" + (startAt);
 
-        return search_url + var_size + var_query + var_start;
+        String filters = "&imgcolor=orange&imgtype=face"; // getFilters();
+
+        return search_url + var_size + var_query + var_start + filters;
     }
 
     private boolean increasePage() {
@@ -280,7 +248,7 @@ public class SearchActivity extends AppCompatActivity {
             }
 //            else
 //            {
-//                // TODO: Handle user requested more than allowed retrieval
+//                // TODO: Handle when user requested more than allowed results
 //            }
         }
         else {
@@ -291,6 +259,89 @@ public class SearchActivity extends AppCompatActivity {
     private void resetSearch() {
         currentPage = 0;
         startAt = 0;
+    }
+
+
+    public void setFilters() {
+        SharedPreferences filters = getSharedPreferences("ImageSearchFilters", 0);
+        String size = filters.getString("size", null);
+        SharedPreferences.Editor editor = filters.edit();
+
+        String all = getString(R.string.str_all);
+
+        if (size == null ) {
+            // First time saving settings
+            editor.putString("size", all);
+            editor.putString("color", all);
+            editor.putString("type", all);
+            editor.putString("site", all);
+            editor.commit();
+        }
+        else {
+            // Welcome back! App already running
+
+        }
+    }
+
+    private String getFilters() {
+
+        String queryFilter;
+
+        SharedPreferences filters = getSharedPreferences("ImageSearchFilters", 0);
+        queryFilter = processSizeFilter(filters.getString("size", "").toString());
+        queryFilter = queryFilter + (processColorFilter(filters.getString("size", "").toString()));
+        queryFilter = queryFilter + (processTypeFilter(filters.getString("size", "").toString()));
+        queryFilter = queryFilter + (processSiteFilter(filters.getString("size", "").toString()));
+
+        return queryFilter;
+    }
+
+    private String processSizeFilter(String str) {
+        String var_str = "&imgsz=";
+        if (str != getString(R.string.str_all)) {
+            str = var_str + str;
+        }
+        else {
+            str = "";
+        }
+
+        return str;
+    }
+
+    private String processColorFilter(String str) {
+        String var_str = "&imgcolor=";
+        if (str != getString(R.string.str_all)) {
+            str = var_str + str;
+        }
+        else {
+            str = "";
+        }
+
+        return str;
+    }
+
+    private String processTypeFilter(String str) {
+        String var_str = "&imgtype=";
+        if (str != getString(R.string.str_all)) {
+            str = var_str + str;
+        }
+        else {
+            str = "";
+        }
+
+        return str;
+    }
+
+    private String processSiteFilter(String str) {
+        String var_str = "&as_sitesearch=";
+        if (str != getString(R.string.str_all)) {
+            str = var_str + str;
+        }
+        else {
+            str = "";
+        }
+
+        return str;
     }
 
 }

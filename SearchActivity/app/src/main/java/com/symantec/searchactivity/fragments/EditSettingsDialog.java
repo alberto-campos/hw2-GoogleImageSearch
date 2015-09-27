@@ -1,10 +1,13 @@
 package com.symantec.searchactivity.fragments;
 
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +61,7 @@ public class EditSettingsDialog extends DialogFragment {
         btnDone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+                Log.d(mEditText.getText().toString(), mEditText.getText().toString());
 
                 getDialog().dismiss();
                 // Perform action on click
