@@ -40,8 +40,8 @@ public class SearchActivity extends ActionBarActivity {
     ArrayList<ImageResult> imageResults;
     ImageResultArrayAdapter imageAdapter;
 
-    private int startAt = 1;
-    private int currentPage = 0;
+    private int startAt;
+    private int currentPage;
     private static int MAX_PAGINATION = 8;
     private static int R_SIZE = 8;
 
@@ -49,6 +49,7 @@ public class SearchActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        resetSearch();
         setupViews();
     }
 
@@ -81,7 +82,7 @@ public class SearchActivity extends ActionBarActivity {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
 
-                if (page <= 8) {
+                if (page < 8) {
                     customLoadMoreDataFromApi(page);
                 } else {
                     // No more results to show
@@ -166,8 +167,7 @@ public class SearchActivity extends ActionBarActivity {
         } else
         {
             // reset
-            currentPage = 0;
-            startAt = 1;
+            resetSearch();
             return false;
         }
     }
@@ -182,10 +182,12 @@ public class SearchActivity extends ActionBarActivity {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 JSONArray imageJsonResults;
+
+
                 try {
                     imageJsonResults = response.getJSONObject("responseData").getJSONArray("results");
 
-                    if (currentPage == 0) {
+                    if (currentPage == 0 || currentPage > MAX_PAGINATION) {
                         imageAdapter.clear();
                     }
                     imageAdapter.addAll(ImageResult.fromJSONArray(imageJsonResults));
@@ -205,23 +207,9 @@ public class SearchActivity extends ActionBarActivity {
     }
 
     public void onImageSearch(View view) {
-        if (isNetworkAvailable()) {
-            fetchImages();
-            if (increasePage()) {
-                fetchImages();
-            }
-            if (increasePage()) {
-                fetchImages();
-            }
-            else
-            {
-                // TODO: Handle user requested more than allowed retrieval
-            }
-        }
-        else {
-            Toast.makeText(this, "No network is available", Toast.LENGTH_SHORT).show();
-        }
-
+        resetSearch();
+        setupViews();
+        retrieveImages();
     }
 
     boolean isNetworkAvailable() {
@@ -231,8 +219,27 @@ public class SearchActivity extends ActionBarActivity {
     }
 
     private void customLoadMoreDataFromApi(int page) {
-        // Reload
-        Toast.makeText(this, "More data requested: " + page, Toast.LENGTH_SHORT).show();
+        retrieveImages();
+    }
+
+    private void retrieveImages() {
+        if (isNetworkAvailable()) {
+            if (increasePage()) {
+                fetchImages();
+            }
+//            else
+//            {
+//                // TODO: Handle user requested more than allowed retrieval
+//            }
+        }
+        else {
+            Toast.makeText(this, "No network is available", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void resetSearch() {
+        currentPage = 0;
+        startAt = 0;
     }
 
 }
