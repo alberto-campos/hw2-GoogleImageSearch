@@ -10,6 +10,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,6 +48,7 @@ public class SearchActivity extends AppCompatActivity {
     private int currentPage;
     private static int MAX_PAGINATION = 8;
     private static int R_SIZE = 8;
+    private static EditSettingsDialog editDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -181,8 +183,6 @@ public class SearchActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-
-
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             showEditDialog();
@@ -193,12 +193,9 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void showEditDialog() {
-
-        FragmentManager fm = getSupportFragmentManager();
-        EditSettingsDialog editDialog = EditSettingsDialog.newInstance("Advanced Filter");
+        editDialog = EditSettingsDialog.newInstance("Advanced Filter");
         editDialog.show(getFragmentManager(), "fragment_edit_settings");
     }
-
 
     private String constructQueryString() {
         String search_url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0";

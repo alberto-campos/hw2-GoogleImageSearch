@@ -1,6 +1,7 @@
 package com.symantec.searchactivity.fragments;
 
 import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
@@ -8,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.symantec.searchactivity.R;
 
@@ -43,6 +46,7 @@ public class EditSettingsDialog extends DialogFragment {
         super.onViewCreated(view, savedInstanceState);
         // Get field from view
         mEditText = (EditText) view.findViewById(R.id.etWebSite);
+        Button btnDone =  (Button) view.findViewById(R.id.btnDone);
         // Fetch arguments from bundle and set title
         String title = getArguments().getString("title", "Host Name");
         getDialog().setTitle(title);
@@ -50,10 +54,15 @@ public class EditSettingsDialog extends DialogFragment {
         mEditText.requestFocus();
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        btnDone.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+
+                getDialog().dismiss();
+                // Perform action on click
+            }
+        });
+
     }
-//
-//    @Override
-//    public void show(android.app.FragmentManager manager, String tag) {
-//        super.show(manager, tag);
-//    }
 }
