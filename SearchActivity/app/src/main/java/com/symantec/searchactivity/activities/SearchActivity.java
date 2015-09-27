@@ -5,16 +5,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -32,8 +34,9 @@ import java.util.ArrayList;
 import cz.msebera.android.httpclient.Header;
 
 
-public class SearchActivity extends ActionBarActivity {
+//public class SearchActivity extends ActionBarActivity {
 
+public class SearchActivity extends AppCompatActivity {
     EditText etQuery;
     GridView gvResults;
     Button btnSearch;
@@ -49,9 +52,23 @@ public class SearchActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(R.layout.actionbar_title);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME);
+
+        setupTabs();
         resetSearch();
         setupViews();
     }
+
+    private void setupTabs() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+    }
+
 
     public void setSettings() {
         SharedPreferences settings = getSharedPreferences("ImageSearchSettings", 0);
@@ -90,24 +107,6 @@ public class SearchActivity extends ActionBarActivity {
             }
         });
 
-        /*
-        // This, the default one works.
-
-        gvResults.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                customLoadMoreDataFromApi(currentPage++);
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-            }
-
-        });
-
-        */
-
         gvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -127,11 +126,50 @@ public class SearchActivity extends ActionBarActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+
+
+        MenuItem actionViewItem = menu.findItem(R.id.miActionButton);
+        // Retrieve the action-view from menu
+        View v = MenuItemCompat.getActionView(actionViewItem);
+        // Find the button within action-view
+        Button b = (Button) v.findViewById(R.id.btnSearch);
+        // Handle button click here
+        Toast.makeText(this, "Button clicked", Toast.LENGTH_SHORT).show();
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_search, menu);
-        return true;
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // TODO: perform query here
+                Toast.makeText(getApplicationContext(), "Entered text in action bar", Toast.LENGTH_SHORT).show();
+                resetSearch();
+                setupViews();
+                retrieveImages();
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+        //return true;
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -139,6 +177,8 @@ public class SearchActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        Toast.makeText(this, "Item selected" + item.toString(), Toast.LENGTH_SHORT).show();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {

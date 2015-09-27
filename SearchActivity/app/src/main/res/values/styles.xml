@@ -1,8 +1,31 @@
 <resources>
 
+    <color name="simple_yellow">#ECD078</color>
+    <color name="primary_blue">#53777A</color>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+        <item name="android:textColorPrimary">#0C090A</item>
+        <item name="android:textColorPrimaryInverse">#2C3539</item>
     </style>
+
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/simple_yellow</item>
+        <item name="android:titleTextStyle">@style/MyActionBar.TitleTextStyle</item>
+
+        <!-- Support library compatibility -->
+        <item name="background">@color/simple_yellow</item>
+        <item name="titleTextStyle">@style/MyActionBar.TitleTextStyle</item>
+    </style>
+
+    <style name="MyActionBar.TitleTextStyle"
+        parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/primary_blue</item>
+    </style>
+
+    <style name="MyActionBarTabText" parent="@style/Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">@color/primary_blue</item>
+    </style>
+
 
 </resources>
