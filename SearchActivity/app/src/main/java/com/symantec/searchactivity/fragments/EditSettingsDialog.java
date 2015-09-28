@@ -78,10 +78,8 @@ public class EditSettingsDialog extends DialogFragment {
 
     private void setPreferences(String str) {
 
-        ((CustomSettings) this.getContext()).setFilters(str);
-//
-//        CustomSettings cf = new CustomSettings();
-//        cf.setFilters(str);
+        CustomSettings cf = new CustomSettings();
+        cf.setFilters(str);
     }
 
 }
