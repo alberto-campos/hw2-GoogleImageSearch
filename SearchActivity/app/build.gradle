@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "com.symantec.searchactivity"
-        minSdkVersion 16
-        targetSdkVersion 22
+        minSdkVersion 23
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }

@@ -1,5 +1,6 @@
 package com.symantec.searchactivity.fragments;
 
+import android.app.Application;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,6 +18,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.symantec.searchactivity.R;
+import com.symantec.searchactivity.shared.CustomSettings;
+
+import java.io.FileOutputStream;
 
 /**
  * Created by acampos on 9/27/15.
@@ -61,6 +65,8 @@ public class EditSettingsDialog extends DialogFragment {
         btnDone.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+
+                setPreferences(mEditText.getText().toString());
                 Log.d(mEditText.getText().toString(), mEditText.getText().toString());
 
                 getDialog().dismiss();
@@ -69,4 +75,13 @@ public class EditSettingsDialog extends DialogFragment {
         });
 
     }
+
+    private void setPreferences(String str) {
+
+        ((CustomSettings) this.getContext()).setFilters(str);
+//
+//        CustomSettings cf = new CustomSettings();
+//        cf.setFilters(str);
+    }
+
 }

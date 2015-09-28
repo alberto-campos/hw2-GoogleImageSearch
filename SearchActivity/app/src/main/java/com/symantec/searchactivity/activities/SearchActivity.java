@@ -1,6 +1,7 @@
 package com.symantec.searchactivity.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -25,6 +26,7 @@ import com.symantec.searchactivity.fragments.EditSettingsDialog;
 import com.symantec.searchactivity.listeners.EndlessScrollListener;
 import com.symantec.searchactivity.models.ImageResult;
 import com.symantec.searchactivity.R;
+import com.symantec.searchactivity.shared.CustomSettings;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +48,7 @@ public class SearchActivity extends AppCompatActivity {
     private static int MAX_PAGINATION = 8;
     private static int R_SIZE = 8;
     private static EditSettingsDialog editDialog;
+    private final int REQUEST_CODE = 1934;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +111,7 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -162,16 +166,42 @@ public class SearchActivity extends AppCompatActivity {
     private void showEditDialog() {
         editDialog = EditSettingsDialog.newInstance("Advanced Filter");
         editDialog.show(getFragmentManager(), "fragment_edit_settings");
+
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
+            String updatedItem = data.getExtras().getString("filters");
+
+            if (updatedItem.length() > 0) {
+                Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
+                // Do something
+            }
+            else {
+                // String came back empty
+                Toast.makeText(this, "Nothing to update", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private String constructQueryString() {
+
+
         String search_url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0";
         String var_size = "&rsz=" + R_SIZE;
         String query = etQuery.getQuery().toString();
         String var_query = "&q=" + query;
         String var_start = "&start=" + (startAt);
 
-        String filters = "&imgcolor=orange&imgtype=face"; // getFilters();
+        String filters = "";
+
+        filters = ((CustomSettings) this.getApplication()).getFilters();
 
         return search_url + var_size + var_query + var_start + filters;
     }
