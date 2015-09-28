@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="spinnerSize">
+        <item>all</item>
         <item>icon</item>
         <item>small</item>
         <item>xxlarge</item>
@@ -8,6 +9,7 @@
     </string-array>
 
     <string-array name="spinnerColor">
+        <item>all</item>
         <item>black</item>
         <item>blue</item>
         <item>brown</item>
@@ -15,6 +17,7 @@
     </string-array>
 
     <string-array name="spinnerType">
+        <item>all</item>
         <item>face</item>
         <item>photo</item>
         <item>clipart</item>

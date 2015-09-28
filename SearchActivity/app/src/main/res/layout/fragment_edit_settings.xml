@@ -13,42 +13,27 @@
         android:id="@+id/tv_size" android:text="@string/str_size"
         android:layout_width="wrap_content" android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_below="@+id/tvSettings"
+        android:gravity="center|center_vertical|bottom"
+        android:padding="5dp"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignBottom="@+id/et_size"
-        android:gravity="bottom"
-        android:padding="10dp" />
+        android:layout_alignParentStart="true" />
 
 
-    <EditText
+    <!--EditText
         android:id="@+id/et_size"
         android:layout_width="match_parent"  android:layout_height="wrap_content"
         android:inputType="text"
         android:imeOptions="actionDone"
         android:layout_gravity="center_vertical"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/tvSettings"
-        android:layout_toRightOf="@+id/tv_size"
-        android:layout_toEndOf="@+id/tv_size"
         android:padding="10dp"
-        android:gravity="bottom" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Advanced Filters"
-            android:id="@+id/tvSettings"
-            android:background="@color/background_material_dark"
-            android:padding="20dp"
-            android:textColor="@color/primary_blue"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/et_size"
-            android:layout_alignEnd="@+id/et_size" />
+        android:gravity="bottom"
+        android:layout_below="@+id/tvSettings"
+        android:layout_alignRight="@+id/etWebSite"
+        android:layout_alignEnd="@+id/etWebSite"
+        android:layout_above="@+id/spSize"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" /-->
 
         <TextView
             android:id="@+id/tvColor"
@@ -56,24 +41,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:gravity="bottom"
-            android:padding="10dp"
-            android:layout_below="@+id/tv_size"
+            android:gravity="center|center_vertical|bottom"
+            android:padding="5dp"
+            android:layout_below="@+id/spSize"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="match_parent"
+        <Spinner
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:imeOptions="actionDone"
-            android:layout_gravity="center_vertical"
-            android:padding="10dp"
-            android:gravity="bottom"
-            android:layout_alignTop="@+id/tvColor"
+            android:id="@+id/spColor"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/str_size"
+            android:entries="@array/spinnerColor"
+            android:layout_below="@+id/spSize"
             android:layout_toRightOf="@+id/tvColor"
-            android:layout_toEndOf="@+id/tvColor" />
+            android:layout_toEndOf="@+id/tvColor"
+            android:gravity="center|center_vertical"
+            android:padding="5dp" />
+
+
 
 
         <TextView
@@ -82,13 +69,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:gravity="bottom"
-            android:padding="10dp"
-            android:layout_below="@+id/editText"
+            android:gravity="center|center_vertical|bottom"
+            android:padding="5dp"
+            android:layout_alignTop="@+id/spType"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
-        <EditText
+        <!--EditText
             android:id="@+id/editText2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -97,9 +84,39 @@
             android:layout_gravity="center_vertical"
             android:padding="10dp"
             android:gravity="bottom"
-            android:layout_below="@+id/editText"
+            android:layout_below="@+id/spSize"
             android:layout_toRightOf="@+id/tvType"
-            android:layout_toEndOf="@+id/tvType" />
+            android:layout_toEndOf="@+id/tvType" /-->
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spType"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/str_type"
+            android:entries="@array/spinnerType"
+            android:layout_below="@+id/spColor"
+            android:layout_toRightOf="@+id/tvType"
+            android:layout_toEndOf="@+id/tvType"
+            android:gravity="center|center_vertical"
+            android:padding="5dp" />
+
+
+
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spSize"
+            android:drawSelectorOnTop="true"
+            android:prompt="@string/str_type"
+            android:entries="@array/spinnerSize"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/tvColor"
+            android:layout_toEndOf="@+id/tvColor"
+            android:gravity="center|center_vertical"
+            android:padding="5dp" />
+
 
         <TextView
             android:id="@+id/tvWebSite"
@@ -107,9 +124,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:gravity="bottom"
-            android:padding="10dp"
-            android:layout_below="@+id/editText2"
+            android:gravity="center|center_vertical|bottom"
+            android:padding="5dp"
+            android:layout_below="@+id/spType"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
@@ -120,12 +137,12 @@
             android:inputType="text"
             android:imeOptions="actionDone"
             android:layout_gravity="center_vertical"
-            android:padding="10dp"
-            android:gravity="bottom"
-            android:layout_alignTop="@+id/tvWebSite"
-            android:layout_toEndOf="@+id/tvWebSite"
-            android:layout_alignBottom="@+id/tvWebSite"
-            android:layout_toRightOf="@+id/tvWebSite" />
+            android:padding="5dp"
+            android:gravity="fill|bottom|left"
+            android:layout_below="@+id/spType"
+            android:layout_toRightOf="@+id/tvWebSite"
+            android:layout_toEndOf="@+id/tvWebSite" />
+
 
         <Button
             android:layout_width="wrap_content"
@@ -133,7 +150,6 @@
             android:text="@string/abc_action_mode_done"
             android:id="@+id/btnDone"
             android:onClick="onClick"
-            android:layout_marginBottom="62dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true" />
 
